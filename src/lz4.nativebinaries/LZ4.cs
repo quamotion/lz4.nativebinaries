@@ -44,7 +44,7 @@ namespace LZ4
         public static extern int LZ4_decoderRingBufferSize(int maxBlockSize);
 
         [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
-        public static extern int LZ4_decompress_safe_usingDict(byte* src, byte* dst, int srcSize, int dstCapcity, byte* dictStart, int dictSize);
+        public static extern int LZ4_decompress_safe_usingDict(byte* src, byte* dst, int srcSize, int dstCapacity, byte* dictStart, int dictSize);
 
         [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
         public static extern int LZ4_decompress_fast_usingDict(byte* src, byte* dst, int originalSize, byte* dictStart, int dictSize);
