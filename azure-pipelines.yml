@@ -1,0 +1,144 @@
+variables:
+  LZ4_VERSION: '1.9.1'
+
+jobs:
+- job: native_windows
+  strategy:
+    maxParallel: 2
+    matrix:
+      x64:
+        BUILD_ARCH: x64
+        PLATFORM: x64
+        RID: win7-x64
+      x86:
+        BUILD_ARCH: x86
+        PLATFORM: Win32
+        RID: win7-x86
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - script: |
+      %VCPKG_INSTALLATION_ROOT%\vcpkg version
+      set VCPKG_BUILD_TYPE=release
+      %VCPKG_INSTALLATION_ROOT%\vcpkg install lz4:%BUILD_ARCH%-windows
+    displayName: Install native dependencies
+  - script: |
+      mkdir %BUILD_ARTIFACTSTAGINGDIRECTORY%\lz4\%RID%\bin\
+      copy %VCPKG_INSTALLATION_ROOT%\installed\%BUILD_ARCH%-windows\bin\*.dll %BUILD_ARTIFACTSTAGINGDIRECTORY%\lz4\%RID%\bin\
+      copy %VCPKG_INSTALLATION_ROOT%\installed\%BUILD_ARCH%-windows\share\lz4\copyright %BUILD_ARTIFACTSTAGINGDIRECTORY%\lz4\%RID%\bin\lz4.copyright
+    displayName: 'Install'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/lz4/'
+      artifactName: 'lz4' 
+      publishLocation: 'Container'
+    displayName: Publish
+
+- job: native_macos
+  pool:
+    vmImage: 'xcode9-macos10.13'
+  variables:
+    TARGET: x86_64-apple-darwin
+    RID: osx-x64
+  steps:
+  - script: |
+      brew install automake
+    displayName: Install autotools
+  - script: |
+      wget https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz -O lz4-${LZ4_VERSION}.tar.gz
+      tar xvf lz4-${LZ4_VERSION}.tar.gz
+    displayName: Download sources
+  - script: |
+      cd lz4-${LZ4_VERSION}
+      # https://github.com/lz4/lz4/pull/695/files
+      make OS=Darwin
+    displayName: Build
+  - script: |
+      mkdir -p ${BUILD_ARTIFACTSTAGINGDIRECTORY}/lz4/${RID}/lib/
+      ls -l lz4-${LZ4_VERSION}/lib/
+      cp lz4-${LZ4_VERSION}/lib/*.dylib ${BUILD_ARTIFACTSTAGINGDIRECTORY}/lz4/${RID}/lib/
+    displayName: Install
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/lz4' 
+      artifactName: 'lz4' 
+      publishLocation: 'Container'
+    displayName: Publish
+
+- job: native_linux_ubuntu_16_04
+  variables:
+    RID: ubuntu.16.04-x64
+    TARGET: x86_64-unknown-linux-gnu
+    CFLAGS: -fPIC
+  container:
+    image: ubuntu:16.04
+    options: "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
+  steps:
+  - script: |
+      /tmp/docker exec -t -u 0 ci-container \
+      sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
+    displayName: Set up sudo
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y lsb-release build-essential wget gcc
+  - script: |
+      lsb_release -a
+    displayName: Check Ubuntu version
+  - script: |
+      wget https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz -O lz4-${LZ4_VERSION}.tar.gz
+      tar xvf lz4-${LZ4_VERSION}.tar.gz
+    displayName: Download sources
+  - script: |
+      cd lz4-${LZ4_VERSION}
+      make
+    displayName: Build
+  - script: |
+      mkdir -p ${BUILD_ARTIFACTSTAGINGDIRECTORY}/lz4/${RID}/lib/
+      ls -l lz4-${LZ4_VERSION}/lib/
+      cp lz4-${LZ4_VERSION}/lib/*.so ${BUILD_ARTIFACTSTAGINGDIRECTORY}/lz4/${RID}/lib/
+    displayName: Install
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/lz4'
+      artifactName: 'lz4'
+      publishLocation: 'Container'
+    displayName: Publish
+
+- job: native_linux_ubuntu_18_04
+  variables:
+    RID: ubuntu.18.04-x64
+    TARGET: x86_64-unknown-linux-gnu
+    CFLAGS: -fPIC
+  container:
+    image: ubuntu:18.04
+    options: "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
+  steps:
+  - script: |
+      /tmp/docker exec -t -u 0 ci-container \
+      sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
+    displayName: Set up sudo
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y lsb-release build-essential wget gcc
+  - script: |
+      lsb_release -a
+    displayName: Check Ubuntu version
+  - script: |
+      wget https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz -O lz4-${LZ4_VERSION}.tar.gz
+      tar xvf lz4-${LZ4_VERSION}.tar.gz
+    displayName: Download sources
+  - script: |
+      cd lz4-${LZ4_VERSION}
+      make
+    displayName: Build
+  - script: |
+      mkdir -p ${BUILD_ARTIFACTSTAGINGDIRECTORY}/lz4/${RID}/lib/
+      ls -l lz4-${LZ4_VERSION}/lib/
+      cp lz4-${LZ4_VERSION}/lib/*.so ${BUILD_ARTIFACTSTAGINGDIRECTORY}/lz4/${RID}/lib/
+    displayName: Install
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/lz4'
+      artifactName: 'lz4'
+      publishLocation: 'Container'
+    displayName: Publish
