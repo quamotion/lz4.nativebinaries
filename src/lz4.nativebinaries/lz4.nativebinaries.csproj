@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net45;netstandard2.0;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netstandard2.0;netcoreapp2.0</TargetFrameworks>
+    
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    
+    <Product>.NET bindings and native libraries for lz4</Product>
+    <Description>lz4 is an extremely fast compression algorithm. This package contains bindings for .NET, and the native binaries for Windows, macOS and Ubuntu Linux.</Description>
+    <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
+
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(SYSTEM_ARTIFACTSDIRECTORY)' != ''">
+    <!-- Native libraries; these files come from VSTS artifacts -->
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/win7-x64/bin/lz4.dll">
+      <PackagePath>runtimes/win-x64/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/win7-x86/bin/lz4.dll">
+      <PackagePath>runtimes/win-x86/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/ubuntu.16.04-x64/lib/liblz4.so">
+      <PackagePath>runtimes/ubuntu.16.04-x64/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/ubuntu.18.04-x64/lib/liblz4.so">
+      <PackagePath>runtimes/ubuntu.18.04-x64/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/osx-x64/lib/liblz4.dylib">
+      <PackagePath>runtimes/osx-x64/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

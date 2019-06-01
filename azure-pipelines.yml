@@ -142,3 +142,29 @@ jobs:
       artifactName: 'lz4'
       publishLocation: 'Container'
     displayName: Publish
+
+- job: build_package
+  dependsOn:
+    - native_windows
+    - native_macos
+    - native_linux_ubuntu_16_04
+    - native_linux_ubuntu_18_04
+  pool:
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      artifactName: lz4
+  - script: |
+      cd src\lz4.nativebinaries
+      mkdir %BUILD_ARTIFACTSTAGINGDIRECTORY%\lz4.nativebinaries
+      dotnet restore
+      dotnet build -c Release
+      dotnet pack -c Release -o %BUILD_ARTIFACTSTAGINGDIRECTORY%\lz4.nativebinaries
+    displayName: Build
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/lz4.nativebinaries'
+      artifactName: 'nuget'
+      publishLocation: 'Container'
+    displayName: Publish
