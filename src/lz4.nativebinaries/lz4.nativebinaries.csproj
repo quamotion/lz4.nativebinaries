@@ -37,6 +37,18 @@
       <Pack>true</Pack>
     </Content>
   </ItemGroup>
+
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <!-- Native libraries; dependencies on Windows -->
+    <Content Include="$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll">
+      <PackagePath>runtimes/win-x64/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll">
+      <PackagePath>runtimes/win-x86/native/%(Filename)%(Extension)</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="All" />
