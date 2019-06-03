@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace LZ4
 {
@@ -48,5 +49,19 @@ namespace LZ4
 
         [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
         public static extern int LZ4_decompress_fast_usingDict(byte* src, byte* dst, int originalSize, byte* dictStart, int dictSize);
+
+        [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
+        public static extern StreamDecodeContextHandle LZ4_createStreamDecode();
+
+        [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
+        public static extern int LZ4_freeStreamDecode(IntPtr LZ4_stream);
+
+        [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
+        public static extern int LZ4_setStreamDecode(StreamDecodeContextHandle LZ4_streamDecode, byte* dictionary, int dictSize);
+
+        [DllImport(NativeLibraryName, CallingConvention = NativeCallingConvention)]
+        public static extern int LZ4_decompress_safe_continue(StreamDecodeContextHandle LZ4_streamDecode, byte* src, byte* dst, int srcSize, int dstCapacity);
+
+
     }
 }
