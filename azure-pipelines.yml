@@ -1,5 +1,5 @@
 variables:
-  LZ4_VERSION: '1.9.2'
+  LZ4_VERSION: '1.9.3'
 
 jobs:
 - job: native_windows
