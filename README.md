@@ -6,8 +6,8 @@
 This repository contains .NET Bindings and native libraries which allow you to use lz4 from within .NET applications.
 
 This package contains native libraries for:
-- Windows (32-bit and 64-bit)
-- macOS
-- Ubuntu 16.04 and 18.04
+- Windows (x86 and x64)
+- macOS (x64)
+- Ubuntu 18.04 and 20.04 (x64)
 
 For other platforms, you can install lz4 using your distribution's package manager.
