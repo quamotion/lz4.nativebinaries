@@ -24,20 +24,12 @@
       <PackagePath>runtimes/win-x86/native/%(Filename)%(Extension)</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/ubuntu.18.04-x64/lib/liblz4.so">
-      <PackagePath>runtimes/ubuntu.18.04-x64/native/%(Filename)%(Extension)</PackagePath>
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/linux-x64/lib/liblz4.so">
+      <PackagePath>runtimes/linux-x64/native/%(Filename)%(Extension)</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/ubuntu.18.04-arm64/lib/liblz4.so">
-      <PackagePath>runtimes/ubuntu.18.04-arm64/native/%(Filename)%(Extension)</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/ubuntu.20.04-x64/lib/liblz4.so">
-      <PackagePath>runtimes/ubuntu.20.04-x64/native/%(Filename)%(Extension)</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/ubuntu.20.04-arm64/lib/liblz4.so">
-      <PackagePath>runtimes/ubuntu.20.04-arm64/native/%(Filename)%(Extension)</PackagePath>
+    <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/linux-arm64/lib/liblz4.so">
+      <PackagePath>runtimes/linux-arm64/native/%(Filename)%(Extension)</PackagePath>
       <Pack>true</Pack>
     </Content>
     <Content Include="$(SYSTEM_ARTIFACTSDIRECTORY)/lz4/osx-x64/lib/liblz4.dylib">
